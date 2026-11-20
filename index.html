@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lucy Lashes | Extensiones de Pestañas &amp; Lifting</title>
+  <!-- Tipografía elegante y legible desde Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/estilos.css" />
+</head>
+<body>
+
+  <!-- ================= ENCABEZADO / HERO ================= -->
+  <header class="hero">
+    <div class="contenedor hero-contenido">
+      <img
+        src="assets/logo-lucy-lashes.png"
+        alt="Logo Lucy Lashes"
+        class="logo-principal"
+      />
+      <h1>Lucy Lashes</h1>
+      <p class="subtitulo">
+        Pestañas pelo por pelo &amp; efecto lifting · Duración de 4 a 5 semanas
+      </p>
+      <div class="hero-botones">
+        <a href="#reservar" class="btn btn-primario">Reservar mi turno</a>
+        <a href="#servicios" class="btn btn-secundario">Ver precios y efectos</a>
+      </div>
+      <div class="info-rapida">
+        <span>📍 Av. 75 N° 763 (Playa)</span>
+        <span>🕒 Lun a Vie · 7:00 a 15:00 hs</span>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ================= AVISO IMPORTANTE ================= -->
+    <section class="seccion-aviso">
+      <div class="contenedor aviso-grid">
+        <div class="aviso-imagen">
+          <img
+            src="assets/aviso-sin-rimel.png"
+            alt="Importante: Venir a la cita sin rímel"
+          />
+        </div>
+        <div class="aviso-texto">
+          <span class="etiqueta">Antes de tu cita</span>
+          <h2>Recordatorio importante</h2>
+          <p>
+            Para asegurar la máxima adherencia y que tu set dure entre <strong>4 y 5 semanas</strong>, recordá asistir a tu turno <strong>sin rímel ni maquillaje</strong> en los ojos.
+          </p>
+          <ul class="lista-tips">
+            <li>✨ Retoque recomendado a los <strong>15 días</strong> ($15.000).</li>
+            <li>✨ La reserva se confirma abonando la seña de <strong>$10.000</strong>.</li>
+            <li>✨ Diseños personalizados: <strong>Doll Eye, Ardilla y Cat Eye</strong>.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= CATÁLOGO DE SERVICIOS ================= -->
+    <section id="servicios" class="seccion">
+      <div class="contenedor">
+        <div class="seccion-header">
+          <span class="etiqueta">Catálogo</span>
+          <h2>Servicios y Precios</h2>
+          <p>Elegí el efecto que mejor va con tu mirada. Tocá un servicio para seleccionarlo directo en la reserva.</p>
+        </div>
+
+        <!-- Filtros por precio / categoría -->
+        <div class="filtros" id="filtros-servicios">
+          <button class="filtro-btn activo" data-filtro="todos">Todos</button>
+          <button class="filtro-btn" data-filtro="25000">$25.000</button>
+          <button class="filtro-btn" data-filtro="28000">$28.000</button>
+          <button class="filtro-btn" data-filtro="retoque">Retoque</button>
+        </div>
+
+        <!-- Acá JavaScript (app.js) inyecta las tarjetas de servicios -->
+        <div class="grid-servicios" id="contenedor-servicios"></div>
+      </div>
+    </section>
+
+    <!-- ================= GALERÍA DE TRABAJOS ================= -->
+    <section id="galeria" class="seccion seccion-rosa-suave">
+      <div class="contenedor">
+        <div class="seccion-header">
+          <span class="etiqueta">Resultados reales</span>
+          <h2>Trabajos y Procesos</h2>
+          <p>Mirá algunos sets terminados y el paso a paso de cada aplicación.</p>
+        </div>
+
+        <!-- Acá JavaScript (app.js) inyecta las fotos y videos -->
+        <div class="grid-galeria" id="contenedor-galeria"></div>
+      </div>
+    </section>
+
+    <!-- ================= RESERVA Y PAGO DE SEÑA ================= -->
+    <section id="reservar" class="seccion">
+      <div class="contenedor">
+        <div class="seccion-header">
+          <span class="etiqueta">Turnos</span>
+          <h2>Reservá tu Cita</h2>
+          <p>Completá tus datos, aboná la seña de <strong>$10.000</strong> y enviá tu comprobante por WhatsApp.</p>
+        </div>
+
+        <div class="reserva-layout">
+          <!-- Formulario de reserva -->
+          <form id="form-reserva" class="tarjeta-formulario">
+            <div class="campo">
+              <label for="nombre-clienta">Tu nombre y apellido *</label>
+              <input
+                type="text"
+                id="nombre-clienta"
+                placeholder="Ej: Camila Pérez"
+                required
+              />
+            </div>
+
+            <div class="campo">
+              <label for="select-servicio">Servicio / Efecto elegido *</label>
+              <select id="select-servicio" required>
+                <!-- Se completa automáticamente desde catalogo.js -->
+              </select>
+            </div>
+
+            <div class="campo">
+              <label for="select-diseno">Diseño de mirada *</label>
+              <select id="select-diseno" required>
+                <option value="Doll Eye">Doll Eye (abre y redondea la mirada)</option>
+                <option value="Ardilla">Ardilla (eleva el arco con suavidad)</option>
+                <option value="Cat Eye">Cat Eye (alarga y rasga hacia el exterior)</option>
+                <option value="A asesorar en el estudio">Prefiero asesorarme en el estudio</option>
+              </select>
+            </div>
+
+            <div class="fila-dos">
+              <div class="campo">
+                <label for="fecha-turno">Día preferido (Lun a Vie) *</label>
+                <input type="date" id="fecha-turno" required />
+              </div>
+
+              <div class="campo">
+                <label for="franja-horaria">Franja horaria (7 a 15 hs) *</label>
+                <select id="franja-horaria" required>
+                  <option value="07:00 hs">07:00 hs</option>
+                  <option value="08:30 hs">08:30 hs</option>
+                  <option value="10:00 hs">10:00 hs</option>
+                  <option value="11:30 hs">11:30 hs</option>
+                  <option value="13:00 hs">13:00 hs</option>
+                  <option value="14:00 hs">14:00 hs</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="campo">
+              <label for="metodo-pago">¿Cómo vas a abonar la seña de $10.000?</label>
+              <select id="metodo-pago">
+                <option value="Link de Mercado Pago">Link de Mercado Pago</option>
+                <option value="Transferencia por Alias / CVU">Transferencia por Alias / CVU</option>
+              </select>
+            </div>
+
+            <div class="campo">
+              <label for="notas-adicionales">Comentarios (opcional)</label>
+              <textarea
+                id="notas-adicionales"
+                rows="2"
+                placeholder="Ej: Es mi primera vez, o tengo set previo para retirar..."
+              ></textarea>
+            </div>
+
+            <!-- Resumen dinámico del turno -->
+            <div class="resumen-box" id="resumen-turno">
+              <!-- JavaScript muestra aquí el total y la seña -->
+            </div>
+
+            <button type="submit" class="btn btn-whatsapp btn-ancho">
+              📲 Enviar solicitud y comprobante por WhatsApp
+            </button>
+          </form>
+
+          <!-- Panel de Pago con Mercado Pago y Datos Bancarios -->
+          <aside class="tarjeta-pago">
+            <h3>1. Aboná tu seña ($10.000)</h3>
+            <p class="texto-chico">
+              Para bloquear tu día y horario se solicita una seña de <strong>$10.000</strong>. El resto se abona el día del turno.
+            </p>
+
+            <a
+              href="https://mpago.la/1b9nE7Q"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn btn-mp btn-ancho"
+            >
+              💳 Pagar seña con Mercado Pago
+            </a>
+
+            <div class="separador"><span>o por transferencia</span></div>
+
+            <div class="datos-transferencia">
+              <div class="dato-fila">
+                <div>
+                  <small>Alias Mercado Pago</small>
+                  <strong id="texto-alias">lucy.lashess10</strong>
+                </div>
+                <button type="button" class="btn-copiar" data-copiar="lucy.lashess10">
+                  Copiar
+                </button>
+              </div>
+
+              <div class="dato-fila">
+                <div>
+                  <small>CVU</small>
+                  <strong id="texto-cvu">0000003100071948537330</strong>
+                </div>
+                <button type="button" class="btn-copiar" data-copiar="0000003100071948537330">
+                  Copiar
+                </button>
+              </div>
+
+              <div class="dato-titular">
+                <small>Titular</small>
+                <p>Lucia Itati Rodriguez Cartoceti</p>
+              </div>
+            </div>
+
+            <div class="ubicacion-card">
+              <h4>📍 Ubicación y Horarios</h4>
+              <p><strong>Av. 75 N° 763 (Playa)</strong></p>
+              <p>Lunes a viernes de 07:00 a 15:00 hs</p>
+              <a
+                href="https://www.google.com/maps/search/?api=1&query=Av.+75+763+Necochea"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="link-mapa"
+              >
+                Ver en Google Maps →
+              </a>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ================= PIE DE PÁGINA ================= -->
+  <footer class="footer">
+    <div class="contenedor footer-contenido">
+      <p><strong>Lucy Lashes</strong> · Pestañas pelo por pelo &amp; Lifting</p>
+      <p>
+        <a href="https://www.instagram.com/lucy.lashess" target="_blank" rel="noopener noreferrer">
+          Instagram @lucy.lashess
+        </a>
+        · WhatsApp: 2262 225957
+      </p>
+    </div>
+  </footer>
+
+  <!-- Cargamos primero los datos (catalogo.js) y luego la lógica (app.js) -->
+  <script src="js/catalogo.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
