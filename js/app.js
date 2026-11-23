@@ -7,9 +7,10 @@ function formatearPesos(numero) {
   return "$" + numero.toLocaleString("es-AR");
 }
 
-// 1. Dibujar las tarjetas de servicios en pantalla
+// 1. Dibujar las tarjetas de servicios en pantalla (sin botón de elección)
 function renderizarServicios(filtro = "todos") {
   const contenedor = document.getElementById("contenedor-servicios");
+  if (!contenedor) return;
   contenedor.innerHTML = "";
 
   const filtrados = SERVICIOS_LUCY.filter((servicio) => {
@@ -28,23 +29,16 @@ function renderizarServicios(filtro = "todos") {
         <p class="meta-servicio">⏳ Duración: ${servicio.duracion}</p>
         <p>${servicio.descripcion}</p>
       </div>
-      <button
-        type="button"
-        class="btn btn-primario"
-        style="margin-top: 1.2rem;"
-        onclick="seleccionarServicioParaReserva('${servicio.id}')"
-      >
-        Elegir este servicio
-      </button>
     `;
 
     contenedor.appendChild(tarjeta);
   });
 }
 
-// 2. Cargar opciones en el desplegable del formulario
+// 2. Cargar opciones en el desplegable del formulario (si está visible)
 function cargarSelectServicios() {
   const select = document.getElementById("select-servicio");
+  if (!select) return;
   select.innerHTML = "";
 
   SERVICIOS_LUCY.forEach((servicio) => {
@@ -55,32 +49,46 @@ function cargarSelectServicios() {
   });
 }
 
-// Al tocar "Elegir este servicio" en una tarjeta, baja al formulario y lo deja marcado
+// Al tocar "Elegir este servicio" en una tarjeta (por si se reactiva en el futuro)
 function seleccionarServicioParaReserva(idServicio) {
   const select = document.getElementById("select-servicio");
-  select.value = idServicio;
+  if (select) {
+    select.value = idServicio;
+  }
   actualizarResumenTurno();
   document.getElementById("reservar").scrollIntoView({ behavior: "smooth" });
 }
 
-// 3. Actualizar el cuadro de resumen con total, seña ($10.000) y saldo restante
+// 3. Actualizar el cuadro de resumen con la seña ($10.000)
 function actualizarResumenTurno() {
-  const idSeleccionado = document.getElementById("select-servicio").value;
-  const servicio = SERVICIOS_LUCY.find((s) => s.id === idSeleccionado) || SERVICIOS_LUCY[0];
-  const saldoRestante = servicio.precio - CONFIG_LUCY.senaMonto;
-
   const resumen = document.getElementById("resumen-turno");
-  resumen.innerHTML = `
-    <p><strong>Servicio:</strong> ${servicio.nombre}</p>
-    <p><strong>Valor total:</strong> ${formatearPesos(servicio.precio)}</p>
-    <p><strong>Seña para reservar:</strong> ${formatearPesos(CONFIG_LUCY.senaMonto)}</p>
-    <p><strong>Resta abonar el día del turno:</strong> ${formatearPesos(saldoRestante)}</p>
-  `;
+  if (!resumen) return;
+
+  const selectServicio = document.getElementById("select-servicio");
+
+  if (selectServicio) {
+    const idSeleccionado = selectServicio.value;
+    const servicio = SERVICIOS_LUCY.find((s) => s.id === idSeleccionado) || SERVICIOS_LUCY[0];
+    const saldoRestante = servicio.precio - CONFIG_LUCY.senaMonto;
+
+    resumen.innerHTML = `
+      <p><strong>Servicio:</strong> ${servicio.nombre}</p>
+      <p><strong>Valor total:</strong> ${formatearPesos(servicio.precio)}</p>
+      <p><strong>Seña para reservar:</strong> ${formatearPesos(CONFIG_LUCY.senaMonto)}</p>
+      <p><strong>Resta abonar el día del turno:</strong> ${formatearPesos(saldoRestante)}</p>
+    `;
+  } else {
+    resumen.innerHTML = `
+      <p><strong>Seña para reservar tu turno:</strong> ${formatearPesos(CONFIG_LUCY.senaMonto)}</p>
+      <p>El saldo restante según el servicio elegido se abona el día de la cita.</p>
+    `;
+  }
 }
 
 // 4. Dibujar la galería de fotos y videos
 function renderizarGaleria() {
   const contenedor = document.getElementById("contenedor-galeria");
+  if (!contenedor) return;
   contenedor.innerHTML = "";
 
   GALERIA_LUCY.forEach((item) => {
@@ -103,9 +111,11 @@ function renderizarGaleria() {
   });
 }
 
-// 5. Configurar botones de filtro por precio
+// 5. Configurar botones de filtro por precio (si están visibles)
 function inicializarFiltros() {
   const botones = document.querySelectorAll(".filtro-btn");
+  if (!botones.length) return;
+
   botones.forEach((boton) => {
     boton.addEventListener("click", () => {
       botones.forEach((b) => b.classList.remove("activo"));
@@ -133,33 +143,43 @@ function inicializarBotonesCopiar() {
 // 7. Enviar el pedido armado a WhatsApp
 function inicializarFormularioReserva() {
   const form = document.getElementById("form-reserva");
-  const selectServicio = document.getElementById("select-servicio");
+  if (!form) return;
 
-  selectServicio.addEventListener("change", actualizarResumenTurno);
+  const selectServicio = document.getElementById("select-servicio");
+  if (selectServicio) {
+    selectServicio.addEventListener("change", actualizarResumenTurno);
+  }
 
   form.addEventListener("submit", (evento) => {
     evento.preventDefault();
 
     const nombre = document.getElementById("nombre-clienta").value.trim();
-    const idServicio = selectServicio.value;
-    const servicio = SERVICIOS_LUCY.find((s) => s.id === idServicio);
-    const diseno = document.getElementById("select-diseno").value;
     const fecha = document.getElementById("fecha-turno").value;
     const hora = document.getElementById("franja-horaria").value;
     const pago = document.getElementById("metodo-pago").value;
     const notas = document.getElementById("notas-adicionales").value.trim();
 
-    const saldo = servicio.precio - CONFIG_LUCY.senaMonto;
+    const selectDiseno = document.getElementById("select-diseno");
 
     // Armamos el mensaje prolijo para WhatsApp
     let mensaje = `¡Hola Lucy! 💖 Quiero reservar un turno en *Lucy Lashes*:\n\n`;
     mensaje += `👤 *Nombre:* ${nombre}\n`;
-    mensaje += `✨ *Servicio:* ${servicio.nombre} (${formatearPesos(servicio.precio)})\n`;
-    mensaje += `👁️ *Diseño:* ${diseno}\n`;
+
+    if (selectServicio) {
+      const servicio = SERVICIOS_LUCY.find((s) => s.id === selectServicio.value);
+      if (servicio) {
+        const saldo = servicio.precio - CONFIG_LUCY.senaMonto;
+        mensaje += `✨ *Servicio:* ${servicio.nombre} (${formatearPesos(servicio.precio)})\n`;
+        if (selectDiseno) {
+          mensaje += `👁️ *Diseño:* ${selectDiseno.value}\n`;
+        }
+        mensaje += `💰 *Saldo el día del turno:* ${formatearPesos(saldo)}\n`;
+      }
+    }
+
     mensaje += `📅 *Fecha preferida:* ${fecha}\n`;
     mensaje += `🕒 *Horario:* ${hora}\n`;
     mensaje += `💳 *Seña (${formatearPesos(CONFIG_LUCY.senaMonto)}):* ${pago}\n`;
-    mensaje += `💰 *Saldo el día del turno:* ${formatearPesos(saldo)}\n`;
     if (notas) {
       mensaje += `📝 *Notas:* ${notas}\n`;
     }
@@ -174,8 +194,10 @@ function inicializarFormularioReserva() {
 document.addEventListener("DOMContentLoaded", () => {
   // Evitar seleccionar fechas pasadas en el calendario
   const inputFecha = document.getElementById("fecha-turno");
-  const hoy = new Date().toISOString().split("T")[0];
-  inputFecha.min = hoy;
+  if (inputFecha) {
+    const hoy = new Date().toISOString().split("T")[0];
+    inputFecha.min = hoy;
+  }
 
   renderizarServicios();
   cargarSelectServicios();
