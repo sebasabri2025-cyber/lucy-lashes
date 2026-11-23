@@ -11,7 +11,7 @@ const CONFIG_LUCY = {
   aliasMP: "lucy.lashess10",
   cvuMP: "0000003100071948537330",
   titularMP: "Lucia Itati Rodriguez Cartoceti",
-  direccion: "Av. 75 N° 763 (Playa)",
+  direccion: "Av. 75 N° 736 (Playa)",
   horarios: "Lunes a viernes de 07:00 a 15:00 hs",
   duracionGeneral: "4 a 5 semanas"
 };
